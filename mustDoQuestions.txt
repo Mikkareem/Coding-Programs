@@ -1,0 +1,16 @@
+-> The Power Sum (https://www.hackerrank.com/challenges/the-power-sum/problem)
+-> XOR-Tree (Codeforces)
+-> Combinations with ordered and unordered and with repetitions and not repetitions
+-> Crossword Puzzle (Hackerrank)
+-> 0/1 BFS on graph
+-> 0/1 BFS on grid
+-> Djikshtra on grid
+
+
+Digit DP Problems
+-> Divisibility by eight (CF 550C)
+
+Dynamic Programming Problems:
+-> Remove One Element (CF 605D div.2)
+(Longest increasing substring with deletion of at most 1 element)
+

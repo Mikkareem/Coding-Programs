@@ -1,0 +1,769 @@
+
+-> if we perform value[a] = min(value[node], value[parent]) from root to leaves
+then we have non-increasing values from root to leaf. eg. Tree Shuffling in Codeforces.
+used for greedy in trees.
+-------------------------------------------------------------------------------------
+Below codeforces solution for C.Good String.
+
+Let's analyse when the string is good.
+Suppose it is t1t2t3.....tk.
+The cyclic shifts of the string are tkt1t2.....tk-1, t2t3.....tkt1.
+We get the following constraints for a good string.
+tk = t2, t1 = t3, t2 = t4, ..... tk-2 = tk, tk-1 = t1.
+
+-> If the string has odd length, then all characters are equal to each other.
+-> If the string has even length, then all characters on odd positions should be equal,
+all characters on even position should be equal.
+
+Now since there are only 10 different types of characters, we can brute force all possible
+combinations of the first and the second character of the string we want to obtain
+(there are only 100 of them) and, for each combination, greedily construct the longest
+possible subsequence of s beginning with those characters in O(n).
+
+// End of the solution for C. Good String.
+
+--------------------------------------------------------------------------------------------
+
+pref[1.....n] is the cumulative prefix sums of array a.
+pref[i] -> sum of a[1....i]
+if we swap a[i] and a[j] where i < j what happens
+pref[1...i-1] and pref[j....n] does not alter.
+pref[i....j-1] changes.
+	
+pref[i] = pref[i]-a[i]+a[j]
+pref[i+1] = pref[i+1]-a[i]+a[j]
+	
+pref[k] changes by the amount pref[k]-(a[i]-a[j]);
+where (i <= k < j)
+
+--------------------------------------------------------------------------------------------
+
+Maximum sum subarray
+
+The array of all positive integers, the maximum sum is the sum of all elements and the subarray
+is the whole array.
+
+The array of all negative integers, the maximum sum is zero and subarray is empty array '[]'
+
+so the maximum sum is greatest non-negative sum we get from array.
+
+---------------------------------------------------------------------------------------------
+-1>>anything is -1
+-1<<anything is -(1<<that thing)
+-1<<31 is equal to 1<<31 which is (-2147483648).
+1<<i = 0 where i >= 32
+1>>i = 0 where i >= 1
+but
+-1>>{1,10,32,33,45} always equal to -1.
+
+a>>-i ----> a<<i
+a<<-i ----> a>>i
+-a<<i ----> -(a<<i)
+-a>>i ----> -(a>>i);
+-a<<-i ----> -(a>>i)
+-a>>-i ----> -(a<<i)
+
+we can only use integer types as operands of both sides of '<<' and '>>'.
+we can't use double or float as operands of any one side.
+
+double a, c;
+int i;
+a << i is not valid.
+a << c is also not valid.
+
+----------------------------------------------------------------------------
+
+The minimum number of digits to make a sum x is given by the formula.
+
+(x/9) + (x%9 != 0)
+
+The maximum sum we get using one digit is 9 (9)
+The maximum sum we get using two digits is 18 (99)
+The maximum sum we get using three digits is 27 (999)
+The maximum sum we get using four digits is 36 (9999) and so on.
+
+1 digit is enough to make sum in the range [0,9] inclusive
+2 digit is enough to make sum in the range [10,18] inclusive
+3 digit is enough to make sum in the range [19,27] inclusive
+4 digit is enough to make sum in the range [28, 36] inclusive and so on.
+
+For example to make x=27
+The answer is 3 -> (27/3 + (27%3 != 0))
+
+For example to make x=30
+The answer is 4 -> (30/3 + (30%3 != 0))
+
+-------------------------------------------------------------------------
+
+Given a, b. Whether we make a=0 and b=0.
+
+x = take 2 from a and take 1 from b.
+y = take 1 from a and take 2 from b.
+
+a = 2x+y
+b = x+2y
+2a = 4x+2y
+-----------
+2a-b = 3x(positive multiples of 3)
+similarly, 2b-a = 3y
+
+80 100
+160-100 = 60%3==0
+200-80 = 120%3==0
+
+x=20 y=40
+
+80 - 20*2 = 80-40 = 40
+100 - 20*1 = 80
+
+a, b
+
+x = take 3 from a and 2 from b
+y = take 2 from a and 3 from b.
+
+a = 3x+2y
+b = 2x+3y
+
+
+3b = 6x + 9y
+2a = 6x + 4y
+-------------
+3b-2a = 5y
+similarly, 3a-2b = 5x
+
+
+General Form.
+
+Given a and b
+In one move you can take 'p' from a and 'q' from b.
+or take 'q' from a and 'p' from b.
+
+Solution
+
+int first = p*a + q*b;
+int second = q*a + p*b;
+int multiple = p+q;
+
+if(first >= 0 and (first % multiple == 0) and second >= 0 and (second % multiple == 0)) {
+	cout << "Yes";
+} else {
+	cout << "No";
+}
+
+----------------------------------------------------------------------------------------------
+
+original string = "abcde"
+indices of string= 01234
+
+reversed string = "edcba"
+indices of string= 01234
+
+original string is O
+reversed string is R.
+
+R[i] is located in O[n-i-1] where n is the length of the string.
+
+e -> n-i-1 = 5-0-1 = 4
+d -> n-i-1 = 5-1-1 = 3
+c -> n-i-1 = 5-2-1 = 2
+b -> n-i-1 = 5-3-1 = 1
+a -> n-i-1 = 5-4-1 = 0
+
+abcdef
+012345
+
+fedcba
+012345
+
+f -> n-i-1 = 6-0-1 = 5
+e -> n-i-1 = 6-1-1 = 4
+d -> n-i-1 = 6-2-1 = 3
+c -> n-i-1 = 6-3-1 = 2
+b -> n-i-1 = 6-4-1 = 1
+a -> n-i-1 = 6-5-1 = 0
+
+---------------------------------------------------------------------------------
+Trailing Zeros in (n!)
+
+int temp = 5;
+
+while(true)
+{
+	if(temp > n) break;
+	ans += (n/temp);
+	temp *= 5;
+}
+
+cout << ans;
+
+20! = 4
+
+ans = 0
+ans += 20/5 = 4
+
+100! = 24
+
+ans = 0
+ans += (100 / 5 + 100 / 25) = 20 + 4 = 24
+
+150! = 37
+
+ans = 0
+ans += (150 / 5 + 150 / 25 + 150 / 125) = 30 + 6 + 1 = 37
+
+-----------------------------------------------------------------------------
+maximum sum subarray
+
+O(n^2)
+
+dp[i][j] = the sum we get from the subarray starting at i and has length j;
+
+base cases:
+dp[i][1] = a[i]; // the sum which we get from the subarray starting at i with length 1.
+
+recurrence:
+if(i+j <= n)
+	dp[i][j] = a[i+j-1] + dp[i][j-1] where 2<=j<=n
+
+--------------------------------------------------------------------------------------------
+In the xy-Coordinate system, we are given two points i.e., P1(x1, y1), P2(x2, y2), and if we are 
+asked to find minimum steps to reach P1 to P2.
+
+Provided we are allowed to make a move in 8 directions surrounded by current point P.
+
+d = max(abs(x1 - x2), abs(y1 - y2))
+
+where d is the minimum steps to reach P1 to P2.
+
+-------------------------------------------------------------------------------------------
+Properties of Triangle:
+
+1) The sum of lengths of any two sides of a triangle is always
+greater than the third side.
+
+2) The difference between the any two sides of a triangle is always
+less than the third side.
+
+3) The sum of all interior angles of any triangle is 180deg.
+
+4) The sum of all exterior angles of any triangle is 360deg.
+
+5) If any interior angle of the triangle is 90deg, then it is called
+right angled triangle.
+
+Equilateral Triangle:
+1) All the three sides are equal.(AB == BC == CA)
+2) All the angles are equal. (A == B == C == 60deg)
+2) All the angles equal to 60deg.
+
+Isoceles Triangle:
+1) Two sides are equal (say AB==CA!=BC)
+2) Two angles are equal (angles of equal side's opposite vertices)
+i.e., if AB==CA then B and C angles are equal
+
+Scalene Triangle:
+1) All sides are different. (AB != BC != CA)
+2) All angles are different. (A != B != C)
+
+Obtuse / Oblique Triangle:
+1) One of the angle greater than 90deg.
+
+Right angled Triangle:
+1) One of the angle must be 90deg.
+
+Acute Triangle:
+1) All three angles are less than 90deg.
+
+------------------------------------------------------------------------------------------
+To get Number of multiples of x in the range [L, R] inclusive.
+
+int getMultiplesInBetween(int L, int R, int x)
+{
+	int first = L - L%x + (L%x==0?0:x);
+	int last = R - R%x;
+	return last/x - right/x + 1;
+}
+
+------------------------------------------------------------------------------------------
+
+String Transformation 1
+
+The most basic observation from the problem is that if we are having any character in A
+greater than in B for some position i, then we cannot get the solution, because any character
+a[i] can be converted into b[i] if a[i]<b[i] (As X should be lesser than Y)
+
+if(a[i] > b[i]) return -1;
+
+Otherwise we get the solution.
+
+Solution:
+Let's loop through all possible values of X ('a' to 't').
+
+And for a particular X, we will find the positions 'i' where A[i] == x and B[i] > X
+we store these positions in vector.
+
+The key idea is,
+If you want to change a->b at some place and also a->c at some other place, it's better
+that you first convert a->b at both positions.
+
+Why so?
+Because even if you change it individually a->b, a->c, it always cost 2 operations,
+but if there are more b->c conversions, then changing both of a's to b will help.
+
+we convinced with setting all the x->y1, x->y2, x->y3 to x->some special character
+
+that special character is min of all y(i)s
+
+it is pretty obvious to take the minimum over all y1, y2, y3....yi.
+because it will help for further moves.
+
+set x->y1 (y1<y2<y3)
+then, in further move it is possible to make x->y2, x->y3 etc.,
+But wouldn't be possible if we take character other than y1.
+
+-------------------------------------------------------------------------------------------
+
+Counting Bits(set bits) from Range
+
+Given: n (1 <= n <= 10^15)
+
+count all set bits from 1...n
+
+0 -> 0 0 0 0 0 0 0 0 0 0 0 -> 0
+1 -> 0 0 0 0 0 0 0 0 0 0 1 -> 1
+2 -> 0 0 0 0 0 0 0 0 0 1 0 -> 2
+3 -> 0 0 0 0 0 0 0 0 0 1 1 -> 4
+4 -> 0 0 0 0 0 0 0 0 1 0 0 -> 5
+5 -> 0 0 0 0 0 0 0 0 1 0 1 -> 7
+6 -> 0 0 0 0 0 0 0 0 1 1 0 -> 9
+7 -> 0 0 0 0 0 0 0 0 1 1 1 -> 12
+8 -> 0 0 0 0 0 0 0 1 0 0 0 -> 13
+9 -> 0 0 0 0 0 0 0 1 0 0 1 -> 15
+10-> 0 0 0 0 0 0 0 1 0 1 0 -> 17
+11-> 0 0 0 0 0 0 0 1 0 1 1 -> 20
+12-> 0 0 0 0 0 0 0 1 1 0 0 -> 22
+13-> 0 0 0 0 0 0 0 1 1 0 1 -> 25
+14-> 0 0 0 0 0 0 0 1 1 1 0 -> 28
+15-> 0 0 0 0 0 0 0 1 1 1 1 -> 32
+16-> 0 0 0 0 0 0 1 0 0 0 0 -> 33
+
+two_powers = (1 << i)
+prev_set = (n/two_powers)*(two_powers/2)
+
+prev_set = (13/2)*1+(13/4)*2+(13/8)*4+(13/16)*8+(13/32)*16 = 6*1 + 3*2 + 1*4 + 0 + 0
+
+remainder = n % two_powers
+
+ans = 01010101010101 + 00110011001100 + 00001111000011 + 00000000111111
+
+010101010101 01
+6 + 1
+
+001100110011 00
+6 + 0
+
+00001111 000011
+4 + 2
+
+--00000000111111
+0 + 6
+
+if(remainder + 1 >= two_powers/2) total += remainder - two_powers/2 + 1;
+
+--------------------------------------------------------------------------------
+
+Given array A of length n, count the #of occurences of A[i] (0<=i<=n) in all the possible non-empty 
+subsequences of A.
+
+Every A[i] occurs 2^(N-1) times in the subsequences of A.
+
+suppose n = 8
+
+00000
+00001
+00010
+00011
+00100
+00101
+00110
+00111
+01000
+01001
+01010
+01011
+01100
+01101
+01110
+01111
+10000
+10001
+10010
+10011
+10100
+10101
+10110
+10111
+11000
+11001
+11010
+11011
+11100
+11101
+11110
+11111
+
+16 16 16 16 16 (1<<4) set bits at each position
+
+--------------------------------------------------------------------------------------------
+
+Range Addition II (Leetcode Easy) -> https://leetcode.com/problems/range-addition-ii/
+
+Given an m * n matrix M initialized with all 0's and several update operations.
+
+Operations are represented by a 2D array, and each operation is represented by an array with 
+two positive integers a and b, which means M[i][j] should be added by one 
+for all 0 <= i < a and 0 <= j < b.
+
+You need to count and return the number of maximum integers in the matrix after performing 
+all the operations.
+
+Example 1:
+Input: 
+m = 3, n = 3
+operations = [[2,2],[3,3]]
+Output: 4
+Explanation: 
+Initially, M = 
+[[0, 0, 0],
+ [0, 0, 0],
+ [0, 0, 0]]
+
+After performing [2,2], M = 
+[[1, 1, 0],
+ [1, 1, 0],
+ [0, 0, 0]]
+
+After performing [3,3], M = 
+[[2, 2, 1],
+ [2, 2, 1],
+ [1, 1, 1]]
+
+So the maximum integer in M is 2, and there are four of it in M. So return 4.
+Note:
+The range of m and n is [1,40000].
+The range of a is [1,m], and the range of b is [1,n].
+The range of operations size won't exceed 10,000.
+
+Solution: 
+
+int maxCount(int m, int n, vector<vector<int>>& ops) {
+	for(vector<int> op: ops) {
+		m = min(m, op[0]);
+		n = min(n, op[1]);
+	}
+    return m*n;
+}
+
+The intersecting part of all the queries contains the maximum sum
+--------------------------------------------------------------------------------------------
+
+Night At The Museum (CF376 Div.2)
+
+Given: a-z circle
+
+The static pointer initially pointing to 'a'. 
+We can rotate the wheel clockwise or anticlockwise
+
+Print one integer — the minimum number of rotations of the wheel, 
+required to print the name given in the input.
+
+In this problem you have to implement exactly what is written in the statement, 
+i. e. you should find minimum number of rotations from letter a to the first letter 
+in the input, then to the second one and so on. The only useful knowledge that may 
+simplify the solution is that the distance between points x and y on the circle of 
+length l (26 in our case) is min(|x - y|, l - |x - y|).
+
+Example:
+
+zeus -> 18
+map -> 35
+ares -> 34
+
+a->z + z->e + e->u + u->s = 1+5+10+2 = 18
+a->m + m->a + a->p = 35
+a->a + a->r + r->e + e->s = 34
+
+-------------------------------------------------------------------------------------------
+Infinite Prefixes (CF EDU81 B)
+
+You are given string s of length n consisting of 0-s and 1-s. 
+You build an infinite string t as a concatenation of an infinite number 
+of strings s, or t=ssss… For example, if s= 10010, then t= 100101001010010...
+
+Calculate the number of prefixes of t with balance equal to x. 
+The balance of some string q is equal to cnt(0,q)−cnt(1,q), 
+where cnt(0,q) is the number of occurrences of 0 in q, 
+and cnt(1,q) is the number of occurrences of 1 in q. 
+The number of such prefixes can be infinite; if it is so, you must say that.
+
+A prefix is a string consisting of several first letters of a given string, 
+without any reorders. An empty prefix is also a valid prefix. For example, 
+the string "abcd" has 5 prefixes: empty string, "a", "ab", "abc" and "abcd".
+
+Input
+The first line contains the single integer T (1≤T≤100) — the number of test cases.
+
+Next 2T lines contain descriptions of test cases — two lines per test case. 
+The first line contains two integers n and x (1≤n≤10^5, −10^9≤x≤10^9) 
+— the length of string s and the desired balance, respectively.
+
+The second line contains the binary string s (|s|=n, si={0,1}).
+
+It's guaranteed that the total sum of n doesn't exceed 105.
+
+Output
+Print T integers — one per test case. For each test case print the number 
+of prefixes or −1 if there is an infinite number of such prefixes.
+
+Example:
+Input:
+4
+6 10
+010010
+5 3
+10101
+1 0
+0
+2 0
+01
+
+Output:
+3
+0
+1
+-1
+
+Explanation
+6 10
+010010
+
+010010010010010010010010010 01 00 1001001001001001......
+101212323434545656767878989 09 01 0121
+
+Note
+In the first test case, there are 3 good prefixes of t: with length 28, 30 and  32
+
+Solution:
+
+Let's denote the pref(i)
+
+pref(i) = k*pref(n) + pref(i mod n)
+
+where n = length of the string 
+k = ceil(i/n) 
+'+' - Concatenation
+
+Then balance is bal(i) of prefix of length i is given by
+bal(i) = k*bal(n) + bal(i mod n)
+
+Now there are two cases,
+bal(n) is equal to 0 or not.
+
+if bal(n) == 0 , then if exists such j(0 <= j < n) that bal(j) = x.
+then for each k>=0, bal(j+kn) = x and answer is -1.
+
+Otherwise for each such j there will be no more than one possible k.
+since there are zero or one solution to the equation bal(j) + k*bal(n) = x.
+The solution exists if and only if [x - bal(j)]congruent(=)->0 mod(bal(n))
+and k = [[x-bal(j)]/bal(n)] >= 0. So just precalc bal(n) and for each 0<=j<n
+check the equation.
+
+------------------------------------------------------------------------------------
+String Similarity(CF EDU94A)
+
+A binary string is a string where each character is either 0 or 1. Two binary strings 
+a and b of equal length are similar, if they have the same character in some position 
+(there exists an integer i such that ai=bi). For example:
+
+-> 10010 and 01111 are similar (they have the same character in position 4);
+-> 10010 and 11111 are similar;
+-> 111 and 111 are similar;
+-> 0110 and 1001 are not similar.
+
+You are given an integer n and a binary string s consisting of 2n−1 characters. 
+Let's denote s[l..r] as the contiguous substring of s starting with l-th character and ending 
+with r-th character (in other words, s[l..r]=slsl+1sl+2…sr).
+
+You have to construct a binary string w of length n which is similar to all of 
+the following strings: 
+
+s[1..n], s[2..n+1], s[3..n+2], ..., s[n..2n−1].
+
+Input
+The first line contains a single integer t (1<=t<=1000) — the number of test cases.
+
+The first line of each test case contains a single integer n (1<=n<=50).
+
+The second line of each test case contains the binary string s of length 2n−1. 
+Each character s[i] is either 0 or 1.
+
+Output
+For each test case, print the corresponding binary string w of length n. 
+If there are multiple such strings — print any of them. It can be shown that at least one string 
+w meeting the constraints always exists.
+
+
+Example:
+Input:
+4
+1
+1
+3
+00000
+4
+1110000
+2
+101
+
+Output:
+1
+000
+1010
+00
+
+
+Solution:
+
+1110000
+The substrings are
+
+111|0|000
+---|-|
+ --|-|-
+  -|-|--
+   |-|---
+   
+The middle element is common for all substrings
+So repeat middle element n times.
+
+--------------------------------------------------------------------------------------------
+Binary String Reconstruction (CF EDU94 C)
+
+Consider the following process. You have a binary string (a string where each character 
+is either 0 or 1) w of length n and an integer x. 
+
+You build a new binary string s consisting of n characters. The i-th character of s is 
+chosen as follows:
+
+-> if the character w[i−x] exists and is equal to 1, then s[i] is 1 
+(formally, if i>x and w[i−x]= 1, then s[i]= 1);
+
+-> if the character w[i+x] exists and is equal to 1, then s[i] is 1 
+(formally, if i+x<=n and w[i+x]= 1, then s[i]= 1);
+
+-> if both of the aforementioned conditions are false, then s[i] is 0.
+
+You are given the integer x and the resulting string s. Reconstruct the original string w.
+
+Input
+The first line contains one integer t (1<=t<=1000) — the number of test cases.
+
+Each test case consists of two lines. The first line contains the resulting 
+string s (2<=|s|<=10^5, each character of s is either 0 or 1). 
+The second line contains one integer x (1<=x<=|s|−1).
+
+The total length of all strings s in the input does not exceed 105.
+
+Output
+For each test case, print the answer on a separate line as follows:
+
+if no string w can produce the string s at the end of the process, print −1;
+otherwise, print the binary string w consisting of |s| characters. 
+If there are multiple answers, print any of them.
+
+Example:
+Input:
+3
+101110
+2
+01
+1
+110
+1
+
+Output:
+111011
+10
+-1
+
+Solution:
+
+1. initially fill the string 'w' with all 1's
+2. if(s[i] == '0') then set w[i-x] = w[i+x] = '0'
+3. Check the constructed string correct or not. if correct print w, otherwise
+print -1.
+
+bool ok = true;
+if(s[i] == '1') {
+	if(w[i-x] == '1' or w[i+x] == '1') continue;
+	ok = false;
+	break;
+}
+
+---------------------------------------------------------------------------------------
+
+ZigZags (CF EDU94 D):
+
+You are given an array a1,a2…an. Calculate the number of tuples (i,j,k,l) such that:
+
+1<=i<j<k<l<=n;
+a[i]==a[k] and a[j]==a[l];
+
+Input
+The first line contains a single integer t (1<=t<=100) — the number of test cases.
+
+The first line of each test case contains a single integer n (4<=n<=3000) 
+— the size of the array a.
+
+The second line of each test case contains n integers a1,a2,…,an (1<=ai<=n) — the array a.
+
+It's guaranteed that the sum of n in one test doesn't exceed 3000.
+
+Output
+For each test case, print the number of described tuples.
+
+Example:
+Input:
+2
+5
+2 2 2 2 2
+6
+1 3 3 1 2 3
+
+Output:
+5
+2
+
+Note
+In the first test case, for any four indices i<j<k<l are valid, 
+so the answer is the number of tuples.
+
+In the second test case, there are 2 valid tuples:
+
+(1,2,4,6): a1=a4 and a2=a6;
+(1,3,4,6): a1=a4 and a3=a6.
+
+Solution:
+
+x x y x y x x y x x y y
+    ^       ^
+    L       R
+    
+how many 'x' we can see before L -> lCounts[a[R]]
+how many 'y' we can see after R -> rCounts[a[L]]
+
+ans += (lCounts*rCounts)
+
+For every L, we can make R pairs, so multiply.
+
+---------------------------------------------------------------------------------
